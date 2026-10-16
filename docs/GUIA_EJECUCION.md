@@ -23,7 +23,7 @@ Desde PowerShell, en la raíz del proyecto:
 - `model`: entidades, interfaces, enumeraciones, patrones y reglas del negocio.
 - `viewcontroller`: `App`, controlador principal, cuatro controladores funcionales y utilidades de presentación.
 - `resources/uniquindio/techsolutionspg2/view`: las cinco vistas FXML y el estilo CSS.
-- `test/java`: 22 pruebas del modelo y 2 de integración de la interfaz.
+- `test/java`: 29 pruebas del modelo distribuidas en 14 clases y 2 de integración de la interfaz.
 - `docs`: diagramas editables y esta guía.
 
 ## Recorrido de demostración
@@ -61,7 +61,7 @@ Las listas de especialidades son `List`, sin repetidos mediante `contains()`.
 
 ## Pruebas
 
-`ModeloTest`: fábricas y tarifas, decoradores, paquetes, ciclos, Builder, fechas,
+Pruebas por clase: las cuatro fábricas, los tres complementos, `ServicioDecoratorTest`, `PaqueteTecnologicoTest`, `SolicitudServicioTest`, `LegacySupportAdapterTest`, `CalculadoraCostoTest`, `TechSolutionsTest` y `GeneradorCodigosTest`. Comprueban tarifas, composición, ciclos, Builder, fechas,
 listas protegidas, adaptación de respuestas, costos, registro, disponibilidad,
 bloqueo de paquetes y Singleton.
 
