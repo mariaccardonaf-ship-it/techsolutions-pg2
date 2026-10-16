@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="uniquindio.techsolutionspg2.viewcontroller.PaquetesController" spacing="16" styleClass="contenido">
+<padding><Insets top="22" right="26" bottom="22" left="26"/></padding>
+    <Label text="Configuración de paquetes" styleClass="seccion"/>
+    <HBox spacing="10"><TextField fx:id="nombrePaquete" id="nombrePaquete" promptText="Nombre del nuevo paquete" HBox.hgrow="ALWAYS"/><Button id="crearPaquete" text="Crear paquete" onAction="#crearPaquete" styleClass="accion"/></HBox>
+    <Label text="Selecciona el paquete que quieres configurar" styleClass="etiqueta"/>
+    <ComboBox fx:id="paqueteSeleccionado" id="paqueteSeleccionado" maxWidth="Infinity"/>
+    <HBox spacing="10"><ComboBox fx:id="componentePaquete" id="componentePaquete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/><Button id="agregarComponente" text="Agregar componente" onAction="#agregarComponente" styleClass="accion"/></HBox>
+    <TreeView fx:id="arbolPaquete" id="arbolPaquete" VBox.vgrow="ALWAYS" prefHeight="300"/>
+    <Label fx:id="costoPaquete" id="costoPaquete" styleClass="etiqueta"/>
+    <Label fx:id="mensajePaquetes" id="mensajePaquetes" wrapText="true"/>
+</VBox>

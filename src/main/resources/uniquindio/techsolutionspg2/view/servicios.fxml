@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<ScrollPane fitToWidth="true" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uniquindio.techsolutionspg2.viewcontroller.ServiciosController">
+<content><VBox spacing="16" styleClass="contenido"><padding><Insets top="22" right="26" bottom="22" left="26"/></padding>
+    <Label text="Catálogo y personalización" styleClass="seccion"/>
+    <HBox spacing="20"><VBox spacing="10" HBox.hgrow="ALWAYS">
+        <Label text="Servicios disponibles" styleClass="etiqueta"/>
+        <TableView fx:id="tablaServicios" id="tablaServicios" prefHeight="220">
+            <columns><TableColumn fx:id="codigoCol" text="Código" prefWidth="110"/><TableColumn fx:id="nombreCol" text="Servicio" prefWidth="280"/><TableColumn fx:id="costoCol" text="Costo base" prefWidth="130"/></columns>
+        </TableView>
+        <Label text="Crear servicio" styleClass="etiqueta"/>
+        <ComboBox fx:id="tipoServicio" id="tipoServicio" maxWidth="Infinity"/>
+        <TextField fx:id="nombreServicio" id="nombreServicio" promptText="Nombre del servicio"/>
+        <TextField fx:id="descripcionServicio" id="descripcionServicio" promptText="Descripción"/>
+        <Button id="crearServicio" text="Crear servicio" onAction="#crearServicio" styleClass="accion"/>
+    </VBox><VBox spacing="12" prefWidth="350" minWidth="320" styleClass="panel">
+        <Label text="Complementos del servicio seleccionado" wrapText="true" styleClass="etiqueta"/>
+        <CheckBox fx:id="prioridadComplemento" id="prioridadComplemento" text="Atención prioritaria · $35.000" onAction="#mostrarDesglose"/>
+        <CheckBox fx:id="soporteComplemento" id="soporteComplemento" text="Soporte 30 días · $50.000" onAction="#mostrarDesglose"/>
+        <CheckBox fx:id="domicilioComplemento" id="domicilioComplemento" text="Atención a domicilio · $25.000" onAction="#mostrarDesglose"/>
+        <Label fx:id="desgloseServicio" id="desgloseServicio" wrapText="true" minHeight="110"/>
+        <Button id="personalizarServicio" text="Guardar personalización" onAction="#personalizarServicio" styleClass="accion"/>
+        <Label text="Personalizaciones listas para contratar" wrapText="true" styleClass="etiqueta"/>
+        <ListView fx:id="listaPersonalizados" id="listaPersonalizados" prefHeight="120"/>
+    </VBox></HBox>
+    <Label fx:id="mensajeServicios" id="mensajeServicios" wrapText="true"/>
+</VBox></content></ScrollPane>

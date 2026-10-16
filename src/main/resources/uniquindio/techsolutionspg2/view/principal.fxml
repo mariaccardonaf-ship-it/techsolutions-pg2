@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="uniquindio.techsolutionspg2.viewcontroller.PrincipalController">
+    <top><VBox spacing="5" styleClass="cabecera"><padding><Insets top="22" right="26" bottom="20" left="26"/></padding>
+        <Label text="TechSolutions" styleClass="titulo"/>
+        <Label text="Servicios tecnológicos, paquetes y solicitudes" styleClass="subtitulo"/>
+    </VBox></top>
+    <center><TabPane fx:id="pestanas" id="pestanas" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="1 · Servicios"><content><fx:include fx:id="servicios" source="servicios.fxml"/></content></Tab>
+            <Tab text="2 · Paquetes"><content><fx:include fx:id="paquetes" source="paquetes.fxml"/></content></Tab>
+            <Tab text="3 · Solicitudes"><content><fx:include fx:id="solicitudes" source="solicitudes.fxml"/></content></Tab>
+            <Tab text="4 · Técnicos"><content><fx:include fx:id="tecnicos" source="tecnicos.fxml"/></content></Tab>
+        </tabs>
+    </TabPane></center>
+    <bottom><Label text="Datos en memoria · La atención a domicilio y el desplazamiento se cobran por separado." styleClass="pie"/></bottom>
+</BorderPane>

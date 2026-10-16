@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<ScrollPane fitToWidth="true" xmlns:fx="http://javafx.com/fxml/1" fx:controller="uniquindio.techsolutionspg2.viewcontroller.SolicitudesController">
+<content><VBox spacing="14" styleClass="contenido"><padding><Insets top="22" right="26" bottom="22" left="26"/></padding>
+    <Label text="Registro y confirmación de solicitudes" styleClass="seccion"/>
+    <HBox spacing="20"><VBox spacing="10" HBox.hgrow="ALWAYS">
+        <Label text="Cliente registrado" styleClass="etiqueta"/>
+        <ComboBox fx:id="clienteSolicitud" id="clienteSolicitud" maxWidth="Infinity"/>
+        <Label text="Servicio, personalización o paquete"/>
+        <HBox spacing="8"><ComboBox fx:id="elementoSolicitud" id="elementoSolicitud" maxWidth="Infinity" HBox.hgrow="ALWAYS"/><Button id="agregarElemento" text="Agregar" minWidth="85" onAction="#agregarElemento"/></HBox>
+        <ListView fx:id="carritoSolicitud" id="carritoSolicitud" prefHeight="115"/>
+        <HBox spacing="10"><Button id="quitarElemento" text="Quitar seleccionado" onAction="#quitarElemento"/><Label fx:id="subtotalSolicitud" id="subtotalSolicitud" wrapText="true"/></HBox>
+    </VBox><VBox spacing="10" prefWidth="330" minWidth="310" styleClass="panel">
+        <Label text="Datos opcionales" styleClass="etiqueta"/>
+        <DatePicker fx:id="fechaSolicitud" id="fechaSolicitud" promptText="Fecha programada" maxWidth="Infinity" editable="false"/>
+        <ComboBox fx:id="prioridadSolicitud" id="prioridadSolicitud" promptText="Prioridad (opcional)" maxWidth="Infinity"/>
+        <TextArea fx:id="observacionesSolicitud" id="observacionesSolicitud" promptText="Observaciones técnicas" prefRowCount="3" wrapText="true"/>
+        <Button id="registrarSolicitud" text="Registrar solicitud" onAction="#registrarSolicitud" styleClass="accion"/>
+    </VBox></HBox>
+    <Label fx:id="mensajeSolicitudes" id="mensajeSolicitudes" wrapText="true"/>
+    <TableView fx:id="tablaSolicitudes" id="tablaSolicitudes" prefHeight="160">
+        <columns><TableColumn fx:id="codigoSolicitudCol" text="Código" prefWidth="130"/><TableColumn fx:id="clienteSolicitudCol" text="Cliente" prefWidth="280"/><TableColumn fx:id="estadoSolicitudCol" text="Estado" prefWidth="160"/><TableColumn fx:id="totalSolicitudCol" text="Total confirmado" prefWidth="190"/></columns>
+    </TableView>
+    <Button id="confirmarSolicitud" text="Consultar técnicos y confirmar seleccionada" onAction="#confirmarSolicitud" styleClass="accion"/>
+    <Label fx:id="detalleSolicitud" id="detalleSolicitud" wrapText="true" minHeight="80"/>
+</VBox></content></ScrollPane>

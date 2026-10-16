@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="uniquindio.techsolutionspg2.viewcontroller.TecnicosController" spacing="20" styleClass="contenido">
+<padding><Insets top="22" right="26" bottom="22" left="26"/></padding>
+    <Label text="Consulta de técnicos" styleClass="seccion"/>
+    <Label text="Selecciona una especialidad para consultar su disponibilidad."/>
+    <HBox spacing="12"><ComboBox fx:id="especialidadTecnico" id="especialidadTecnico" prefWidth="310"/><Button id="consultarTecnico" text="Consultar disponibilidad" onAction="#consultarTecnico" styleClass="accion"/></HBox>
+    <Label fx:id="resultadoTecnico" id="resultadoTecnico" wrapText="true" styleClass="resultado" minHeight="160"/>
+    <Label fx:id="mensajeTecnicos" id="mensajeTecnicos" wrapText="true"/>
+    <Separator/>
+    <Label text="Proveedor de demostración: LegacySupport está simulado. Recuperación no tiene técnicos disponibles en este ejemplo. Los códigos y desplazamientos son datos de prueba." wrapText="true" styleClass="nota"/>
+</VBox>

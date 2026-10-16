@@ -1,14 +1,11 @@
 /**
- * Declara el módulo de TechSolutions y sus dependencias de JavaFX.
- * Configura los paquetes exportados y el acceso necesario para la carga FXML.
+ * Declara las dependencias JavaFX y los paquetes del modelo y la presentación.
  */
 module uniquindio.techsolutionspg2 {
     requires javafx.controls;
     requires javafx.fxml;
 
-
-
-
     exports uniquindio.techsolutionspg2.model;
-    opens uniquindio.techsolutionspg2.model to javafx.fxml;
+    exports uniquindio.techsolutionspg2.viewcontroller;
+    opens uniquindio.techsolutionspg2.viewcontroller to javafx.fxml;
 }

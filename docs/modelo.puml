@@ -1,0 +1,313 @@
+@startuml
+left to right direction
+skinparam monochrome true
+skinparam classAttributeIconSize 0
+hide empty members
+title TechSolutions - Diagrama de clases del modelo
+package "Coordinación y apoyo" {
+class TechSolutions {
+- catalogo: List<Servicio>
+- paquetes: List<PaqueteTecnologico>
+- clientes: List<Cliente>
+- solicitudes: List<SolicitudServicio>
+- proveedor: ProveedorTecnicos
+- calculadora: CalculadoraCosto
+--
++ TechSolutions(proveedor: ProveedorTecnicos)
++ registrarServicio(f: ServicioFactory, nombre: String, descripcion: String): Servicio
++ crearPaquete(nombre: String): PaqueteTecnologico
++ registrarSolicitud(s: SolicitudServicio): ResultadoOperacion
++ confirmarSolicitud(codigo: String): ResultadoOperacion
++ consultarTecnico(e: Especialidad): DisponibilidadTecnica
++ consultarServicios(): List<Servicio>
++ consultarPaquetes(): List<PaqueteTecnologico>
++ consultarClientes(): List<Cliente>
++ consultarSolicitudes(): List<SolicitudServicio>
+- obtenerDesplazamientos(s: SolicitudServicio): List<DisponibilidadTecnica>
+- bloquearPaquetes(s: SolicitudServicio): void
+}
+class CalculadoraCosto {
++ calcularTotal(elementos: List<ComponenteTecnologico>, desplazamientos: List<DisponibilidadTecnica>): double
+}
+class GeneradorCodigos <<Singleton>> {
+- instancia: GeneradorCodigos {static}
+- contador: long
+--
+- GeneradorCodigos()
++ getInstancia(): GeneradorCodigos {static}
++ siguienteCodigo(prefijo: String): String
+}
+class ResultadoOperacion {
+- exitoso: boolean
+- mensaje: String
+--
++ ResultadoOperacion(exitoso: boolean, mensaje: String)
++ isExitoso(): boolean
++ getMensaje(): String
+}
+}
+package "Clientes y solicitudes · Builder" {
+class Cliente {
+- documento: String
+- nombreCompleto: String
+- correo: String
+--
++ Cliente(documento: String, nombreCompleto: String, correo: String)
+}
+class SolicitudServicio {
+- codigo: String
+- fechaCreacion: LocalDate
+- cliente: Cliente
+- elementos: List<ComponenteTecnologico>
+- costoTotal: double
+- estado: EstadoSolicitud
+- fechaProgramada: LocalDate [0..1]
+- observaciones: String [0..1]
+- prioridad: Prioridad [0..1]
+--
+- SolicitudServicio(builder: Builder)
++ confirmar(total: double): void
++ getElementos(): List<ComponenteTecnologico>
++ getCostoTotal(): double
++ getEstado(): EstadoSolicitud
+}
+class Builder <<interna static>> {
+- codigo: String
+- fechaCreacion: LocalDate
+- cliente: Cliente
+- elementos: List<ComponenteTecnologico>
+- fechaProgramada: LocalDate [0..1]
+- observaciones: String [0..1]
+- prioridad: Prioridad [0..1]
+--
++ Builder(codigo: String, cliente: Cliente)
++ agregarElemento(c: ComponenteTecnologico): Builder
++ fechaProgramada(fecha: LocalDate): Builder
++ observaciones(texto: String): Builder
++ prioridad(valor: Prioridad): Builder
++ validar(): ResultadoOperacion
++ build(): SolicitudServicio
+}
+enum Prioridad {
+BAJA
+MEDIA
+ALTA
+}
+enum EstadoSolicitud {
+REGISTRADA
+CONFIRMADA
+}
+}
+package "Disponibilidad técnica · Adapter" {
+enum Especialidad {
+PREVENTIVO
+CORRECTIVO
+REDES
+RECUPERACION
+}
+interface ProveedorTecnicos {
++ consultarTecnico(e: Especialidad): DisponibilidadTecnica
+}
+class LegacySupportAdapter {
+- legacy: LegacySupport
+- codigos: Map<Especialidad, Integer>
+--
++ consultarTecnico(e: Especialidad): DisponibilidadTecnica
+- traducirEspecialidad(e: Especialidad): int
+- interpretar(respuesta: String, e: Especialidad): DisponibilidadTecnica
+}
+class LegacySupport <<externa>> {
++ consultar(codigo: int): String
+}
+class DisponibilidadTecnica {
+- idTecnico: String [0..1]
+- especialidad: Especialidad
+- disponible: boolean
+- costoDesplazamiento: double
+--
++ isDisponible(): boolean
++ getIdTecnico(): String
++ getEspecialidad(): Especialidad
++ getCostoDesplazamiento(): double
+}
+}
+package "Elementos contratables · Composite" {
+interface ComponenteTecnologico {
++ getCosto(): double
++ getDescripcion(): String
++ getEspecialidadesPresenciales(): List<Especialidad>
+}
+abstract class Servicio {
+- codigo: String
+- nombre: String
+- descripcion: String
+- costoBase: double
+--
+# Servicio(codigo: String, nombre: String, descripcion: String, costoBase: double)
++ getCodigo(): String
++ getNombre(): String
++ getDescripcion(): String
++ getCostoBase(): double
++ getCosto(): double
++ getEspecialidad(): Especialidad {abstract}
++ getEspecialidadesPresenciales(): List<Especialidad>
+}
+class PaqueteTecnologico {
+- codigo: String
+- nombre: String
+- componentes: List<ComponenteTecnologico>
+- bloqueado: boolean = false
+--
++ agregarComponente(c: ComponenteTecnologico): ResultadoOperacion
++ contieneComponente(c: ComponenteTecnologico): boolean
++ getComponentes(): List<ComponenteTecnologico>
++ getCosto(): double
++ getDescripcion(): String
++ getEspecialidadesPresenciales(): List<Especialidad>
++ bloquearRecursivamente(): void
+}
+interface ServicioContratable {
+}
+}
+package "Servicios concretos" {
+class MantenimientoPreventivo {
+- COSTO_BASE: double = 80000 {static, final}
+--
++ MantenimientoPreventivo(codigo: String, nombre: String, descripcion: String)
++ getEspecialidad(): Especialidad
+}
+class MantenimientoCorrectivo {
+- COSTO_BASE: double = 120000 {static, final}
+--
++ MantenimientoCorrectivo(codigo: String, nombre: String, descripcion: String)
++ getEspecialidad(): Especialidad
+}
+class InstalacionRedes {
+- COSTO_BASE: double = 180000 {static, final}
+--
++ InstalacionRedes(codigo: String, nombre: String, descripcion: String)
++ getEspecialidad(): Especialidad
+}
+class RecuperacionInformacion {
+- COSTO_BASE: double = 150000 {static, final}
+--
++ RecuperacionInformacion(codigo: String, nombre: String, descripcion: String)
++ getEspecialidad(): Especialidad
+}
+}
+package "Complementos · Decorator" {
+abstract class ServicioDecorator {
+- componente: ServicioContratable
+- incremento: double
+--
++ getCosto(): double
++ getDescripcion(): String
++ getEspecialidadesPresenciales(): List<Especialidad>
+}
+class AtencionPrioritaria {
+- INCREMENTO: double = 35000 {static, final}
+--
++ AtencionPrioritaria(c: ServicioContratable)
++ getDescripcion(): String
+}
+class SoporteTecnico30Dias {
+- INCREMENTO: double = 50000 {static, final}
+--
++ SoporteTecnico30Dias(c: ServicioContratable)
++ getDescripcion(): String
+}
+class AtencionDomicilio {
+- INCREMENTO: double = 25000 {static, final}
+--
++ AtencionDomicilio(c: ServicioContratable)
++ getDescripcion(): String
++ getEspecialidadesPresenciales(): List<Especialidad>
+}
+}
+package "Creación de servicios · Factory Method" {
+interface ServicioFactory {
++ crearServicio(codigo: String, nombre: String, descripcion: String): Servicio
+}
+class MantenimientoPreventivoFactory {
++ crearServicio(codigo: String, nombre: String, descripcion: String): Servicio
+}
+class MantenimientoCorrectivoFactory {
++ crearServicio(codigo: String, nombre: String, descripcion: String): Servicio
+}
+class InstalacionRedesFactory {
++ crearServicio(codigo: String, nombre: String, descripcion: String): Servicio
+}
+class RecuperacionInformacionFactory {
++ crearServicio(codigo: String, nombre: String, descripcion: String): Servicio
+}
+}
+ServicioContratable --|> ComponenteTecnologico
+Servicio ..|> ServicioContratable
+PaqueteTecnologico ..|> ComponenteTecnologico
+ServicioDecorator ..|> ServicioContratable
+PaqueteTecnologico "0..*" o-- "0..*" ComponenteTecnologico : componentes
+ServicioDecorator "0..*" o-- "1" ServicioContratable : envuelto
+MantenimientoPreventivo --|> Servicio
+MantenimientoPreventivoFactory ..|> ServicioFactory
+MantenimientoPreventivoFactory ..> MantenimientoPreventivo : crea
+MantenimientoCorrectivo --|> Servicio
+MantenimientoCorrectivoFactory ..|> ServicioFactory
+MantenimientoCorrectivoFactory ..> MantenimientoCorrectivo : crea
+InstalacionRedes --|> Servicio
+InstalacionRedesFactory ..|> ServicioFactory
+InstalacionRedesFactory ..> InstalacionRedes : crea
+RecuperacionInformacion --|> Servicio
+RecuperacionInformacionFactory ..|> ServicioFactory
+RecuperacionInformacionFactory ..> RecuperacionInformacion : crea
+AtencionPrioritaria --|> ServicioDecorator
+SoporteTecnico30Dias --|> ServicioDecorator
+AtencionDomicilio --|> ServicioDecorator
+SolicitudServicio "0..*" -- "1" Cliente : cliente
+SolicitudServicio "0..*" o-- "1..*" ComponenteTecnologico : elementos
+Builder ..> SolicitudServicio : construye; clase interna static
+SolicitudServicio ..> Prioridad : prioridad opcional
+SolicitudServicio ..> EstadoSolicitud : estado
+LegacySupportAdapter ..|> ProveedorTecnicos
+LegacySupportAdapter "0..*" -- "1" LegacySupport : legacy
+LegacySupportAdapter ..> DisponibilidadTecnica : crea
+LegacySupportAdapter ..> Especialidad : traduce
+DisponibilidadTecnica ..> Especialidad : especialidad
+Servicio ..> Especialidad : especialidad
+TechSolutions "1" -- "0..*" Servicio : catalogo
+TechSolutions "1" -- "0..*" Cliente : clientes
+TechSolutions "1" -- "0..*" PaqueteTecnologico : paquetes
+TechSolutions "1" -- "0..*" SolicitudServicio : solicitudes
+TechSolutions "0..*" -- "1" ProveedorTecnicos : proveedor
+TechSolutions "1" -- "1" CalculadoraCosto : calculadora
+TechSolutions ..> ServicioFactory : utiliza
+TechSolutions ..> GeneradorCodigos : genera codigos
+TechSolutions ..> ResultadoOperacion : informa
+CalculadoraCosto ..> ComponenteTecnologico : suma costos
+CalculadoraCosto ..> DisponibilidadTecnica : desplazamientos unicos
+note bottom of SolicitudServicio
+Constructor privado: Builder es una clase anidada estática.
+confirmar(total) guarda el importe y cambia el estado una sola vez.
+La lista de elementos se expone solo para lectura.
+end note
+note bottom of ServicioContratable
+Extiende ComponenteTecnologico.
+Los decoradores solo aceptan ServicioContratable: no paquetes.
+Servicios y decoradores son inmutables tras construirse.
+end note
+note bottom of PaqueteTecnologico
+contieneComponente() recorre todos los niveles.
+Rechazar c == this o un paquete c que contenga this.
+bloquearRecursivamente() impide cambios en todos los paquetes contratados.
+getComponentes() devuelve una lista de solo lectura.
+end note
+note bottom of CalculadoraCosto
+Regla del ejercicio: una consulta y un desplazamiento por especialidad presencial.
+Reunir especialidades en List sin repetidos mediante contains().
+Falta de cualquier técnico bloquea la confirmación.
+Atención a domicilio ($25000) NO incluye desplazamiento de LegacySupport.
+Recalcular desde cero; no acumular cobros al repetir una operación.
+end note
+note bottom of GeneradorCodigos
+Unicidad dentro de una ejecución; verificar códigos al registrar.
+end note
+@enduml
